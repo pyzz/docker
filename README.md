@@ -1,4 +1,3 @@
-# docker
 <h1>docker 的使用命令</h1>
 
 参考：　https://yeasy.gitbooks.io/docker_practice/content/basic_concept/
@@ -34,5 +33,41 @@ docker commit [选项] <容器ID或容器名> [<仓库名>[:<标签>]]　   ：
     
 docker history　＃　查看　镜像的修改记录　<br>
 
+<h3>使用 Dockerfile 定制镜像</h3>
+<h4>编写Dockerfile文件</h4> 
+在一个空白目录中，建立一个文本文件，并命名为 Dockerfile<br>
+　　其内容为：<br>
+      FROM nginx<br>
+      RUN echo '<h1>Hello, Docker!</h1>' > /usr/share/nginx/html/index.html<br>
+FROM 指定基础镜像<br>
+RUN 执行命令<br>
+　　shell 格式：RUN <命令>　如上<br>
+  　exec 格式：RUN ["可执行文件", "参数1", "参数2"]，这更像是函数调用中的格式<br>
+   
+   ＃　注意１，每一个ｒｕｎ都为建了一层新的镜像，果然是连贯的ｓｈｅｌｌ命令应如下，支持&& 将各个所需命令串联起来， # 进行注释的格式，\ 的命令换行方式<br>
+   ＃　注意２，每一层的东西并不会在下一层被删除，会一直跟随着镜像，因此镜像构建时，一定要确保每一层只添加真正需要添加的东西，任何无关的东西都应该<b>清理掉</b><br>
+   
+   FROM debian:jessie
+   RUN buildDeps='gcc libc6-dev make' \
+       && apt-get update \
+       && apt-get install -y $buildDeps \
+       && wget -O redis.tar.gz "http://download.redis.io/releases/redis-3.2.5.tar.gz" \
+       && mkdir -p /usr/src/redis \
+       && tar -xzf redis.tar.gz -C /usr/src/redis --strip-components=1 \
+       && make -C /usr/src/redis \
+       && make -C /usr/src/redis install \
+       && rm -rf /var/lib/apt/lists/* \
+       && rm redis.tar.gz \
+       && rm -r /usr/src/redis \
+       && apt-get purge -y --auto-remove $buildDeps
+       
+<h4>构建镜像</h4>
+
+在 Dockerfile 文件所在目录执行：
+   docker build -t nginx:v3 .
+   docker build [选项] <上下文路径/URL/->   ，指定了最终镜像的名称与标签 -t nginx:v3
+   注意1，docker build 命令最后有一个 “.”  ，表示当前目录， 这是在指定<b>上下文路径</b>。 
     
     　
+
+
