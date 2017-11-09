@@ -16,6 +16,7 @@
 <h3>docker rmi $(docker images -q -f dangling=true)</h3>
 <br>删除虚悬镜像　（一般来说，虚悬镜像已经失去了存在的价值　＜ｎｏｎｅ＞）
 
+<h3>启动与修改镜像</h3>
 镜像启动命令　nginx命令<br>
     docker run --name webserver -d -p 80:80 nginx：版本　＃　这条命令会用 nginx 镜像启动一个容器，命名为 webserver，并且映射了 80 端口（没有版本号，默认启动最新的版本　latest　）<br>
         $ docker exec -it webserver bash　＃　修改ｎｇｎｉｘ的默认显示页面　<br>
