@@ -19,7 +19,7 @@
 镜像启动命令　nginx命令<br>
     docker run --name webserver -d -p 80:80 nginx：版本　＃　这条命令会用 nginx 镜像启动一个容器，命名为 webserver，并且映射了 80 端口（没有版本号，默认启动最新的版本　latest　）<br>
         $ docker exec -it webserver bash　＃　修改ｎｇｎｉｘ的默认显示页面　<br>
-        root@3729b97e8226:/# echo '<\h\1>Hello, Docker!<\/h\1>' > /usr/share/nginx/html/index.html<br>
+        root@3729b97e8226:/# echo '《h1》Hello, Docker!《/h1》' > /usr/share/nginx/html/index.html<br>
         root@3729b97e8226:/# exit<br>
         exit　<br>
     我们修改了容器的文件，也就是改动了容器的存储层。我们可以通过 docker diff 命令看到具体的改动<br>
