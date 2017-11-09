@@ -38,7 +38,7 @@ docker history　＃　查看　镜像的修改记录　<br>
 在一个空白目录中，建立一个文本文件，并命名为 Dockerfile<br>
 　　其内容为：<br>
       FROM nginx<br>
-      RUN echo '<h1>Hello, Docker!</h1>' > /usr/share/nginx/html/index.html<br>
+      RUN echo 'h1>Hello, Docker!</h1' > /usr/share/nginx/html/index.html<br>
 FROM 指定基础镜像<br>
 RUN 执行命令<br>
 　　shell 格式：RUN <命令>　如上<br>
