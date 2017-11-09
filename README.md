@@ -1,10 +1,10 @@
 # docker
-docker 的使用命令
+<h1>docker 的使用命令<h1>
 
 参考：　https://yeasy.gitbooks.io/docker_practice/content/basic_concept/
 
 列出已经下载下来的镜像（显示的＜ｎｏｎｅ＞，是虚悬镜像　）
-docker images
+<h３>docker images<h３>
 docker images -a　：可以保持中间镜像一起显示出　（中间镜像一般是＜ｎｏｎｅ＞，但与　虚悬镜像不同，他们是上层镜像的依赖镜像，删除所依赖的镜像中间镜像也会被删除掉）
 
 查找相应的镜像　　docker images ubuntu　或　docker images ubuntu:16.04
