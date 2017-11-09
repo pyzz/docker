@@ -19,7 +19,7 @@
 镜像启动命令　nginx命令<br>
     docker run --name webserver -d -p 80:80 nginx：版本　＃　这条命令会用 nginx 镜像启动一个容器，命名为 webserver，并且映射了 80 端口（没有版本号，默认启动最新的版本　latest　）<br>
         $ docker exec -it webserver bash　＃　修改ｎｇｎｉｘ的默认显示页面　<br>
-        root@3729b97e8226:/# echo '<\h1>Hello, Docker!<\/h1>' > /usr/share/nginx/html/index.html<br>
+        root@3729b97e8226:/# echo '<\h\1>Hello, Docker!<\/h\1>' > /usr/share/nginx/html/index.html<br>
         root@3729b97e8226:/# exit<br>
         exit　<br>
     我们修改了容器的文件，也就是改动了容器的存储层。我们可以通过 docker diff 命令看到具体的改动<br>
@@ -68,6 +68,10 @@ RUN 执行命令<br>
    docker build [选项] <上下文路径/URL/->   ，指定了最终镜像的名称与标签 -t nginx:v3
    注意1，docker build 命令最后有一个 “.”  ，表示当前目录， 这是在指定<b>上下文路径</b>。 
     
+    docker build 还支持从 URL 构建，比如可以直接从 Git repo 中构建, 如：docker build https://github.com/twang2218/gitlab-ce-zh.git#:8.14
+    用给定的 tar 压缩包构建 如：  docker build http://server/context.tar.gz
+    从标准输入中读取 Dockerfile 进行构建  如： docker build - < Dockerfile 或 cat Dockerfile | docker build -
+    从标准输入中读取上下文压缩包进行构建 如：docker build - < context.tar.gz
     　
 
 
