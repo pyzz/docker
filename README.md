@@ -135,3 +135,57 @@ Untagged: node@sha256:b4f0e0bdeb578043c1ea6862f0d40cc4afe32a4a582f3be235a3b16442
         docker rm  trusting_newton  #  trusting_newton 是ps 查询出的names <br>
         如果要删除一个运行中的容器，可以添加 -f 参数 <br>
         可以组合docker rm $(docker ps -a -q) 可以全部清理掉  <br>
+        
+<h3>仓库</h3>
+    共有仓库可以在 docker hub 上下载<br>
+    
+    私有仓库 docker-registry 是官方提供的工具，可以用于构建私有的镜像仓库。<br>
+      $ docker run -d -p 5000:5000 registry   # 没有指定路径，默认情况下，仓库会被创建在容器的 /var/lib/registry
+      $ docker run \
+         -e SETTINGS_FLAVOR=s3 \
+         -e AWS_BUCKET=acme-docker \
+         -e STORAGE_PATH=/registry \
+         -e AWS_KEY=AKIAHSHB43HS3J92MXZ \
+         -e AWS_SECRET=xdDowwlK7TJajV1Y7EoOZrmuPEJlHYcNP2k4j49T \
+         -e SEARCH_BACKEND=sqlalchemy \
+         -p 5000:5000 \
+         registry
+       $ docker run -d \
+        -p 5000:5000 \
+        -v /home/user/registry-conf:/registry-conf \  #指定本地路径
+        -e DOCKER_REGISTRY_CONFIG=/registry-conf/config.yml \
+        registry
+    <h4>在私有仓库上传、下载、搜索镜像</h4>
+      使用docker tag 将 ba58 这个镜像标记为 192.168.7.26:5000/test（格式为 docker tag IMAGE[:TAG] [REGISTRYHOST/][USERNAME/]NAME[:TAG]）。
+      docker tag ba58 192.168.7.26:5000/test
+      curl http://192.168.7.26:5000/v1/search  # 用 curl 查看仓库中的镜像
+      从另外一台机器去下载这个镜像
+          docker pull 192.168.7.26:5000/test
+      上传本地的镜像到私有 Docker 仓库<br>
+      
+      可以使用yaml文件件格式编写批量上传方式 如： docker-compose.yml 文件<br>
+       version: "3.4"
+       services:
+
+         ubuntu:
+           image: 127.0.0.1:5000/ubuntu:latest
+         centos:
+           image: 127.0.0.1:5000/centos:centos7
+       在该文件路径下  执行 docker-compose push
+     
+    <h4>配置文件</h4>  不太明白-需要上网查找资料
+       在 config_sample.yml 文件中，可以看到一些现成的模板段：
+       common：基础配置
+       local：存储数据到本地文件系统
+       s3：存储数据到 AWS S3 中
+       dev：使用 local 模板的基本配置
+       test：单元测试使用
+       prod：生产环境配置（基本上跟s3配置类似）
+       gcs：存储数据到 Google 的云存储
+       swift：存储数据到 OpenStack Swift 服务
+       glance：存储数据到 OpenStack Glance 服务，本地文件系统为后备
+       glance-swift：存储数据到 OpenStack Glance 服务，Swift 为后备
+       elliptics：存储数据到 Elliptics key/value 存储
+        
+       
+      
