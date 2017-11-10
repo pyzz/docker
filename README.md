@@ -122,13 +122,16 @@ Untagged: node@sha256:b4f0e0bdeb578043c1ea6862f0d40cc4afe32a4a582f3be235a3b16442
        243c32535da7d142fb0e6df616a3c3ada0b8ab417937c853a9e1c251f499f550
        $ sudo docker ps
        CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
-       243c32535da7        ubuntu:latest       "/bin/bash"         18 seconds ago      Up 17 seconds                           nostalgic_hypatia
+       243c32535da7        ubuntu:latest       "/bin/bash"         18 seconds ago      Up 17 seconds                   nostalgic_hypatia
        $sudo docker attach nostalgic_hypatia
        root@243c32535da7:/#
        
     <h4>导入导出容器</h4>
+       cat ubuntu.tar | sudo docker import - test/ubuntu:v1.0 #  导入
+       sudo docker export 7691a814370e > ubuntu.tar  # 导出
        
-      
-       
-       
-       
+    <h4>删除容器</h4>
+        docker ps -a 命令可以查看所有已经创建的包括终止状态的容器 <br>
+        docker rm  trusting_newton  #  trusting_newton 是ps 查询出的names <br>
+        如果要删除一个运行中的容器，可以添加 -f 参数 <br>
+        可以组合docker rm $(docker ps -a -q) 可以全部清理掉  <br>
