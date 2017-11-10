@@ -69,9 +69,28 @@ RUN 执行命令<br>
    注意1，docker build 命令最后有一个 “.”  ，表示当前目录， 这是在指定<b>上下文路径</b>。 
     
     docker build 还支持从 URL 构建，比如可以直接从 Git repo 中构建, 如：docker build https://github.com/twang2218/gitlab-ce-zh.git#:8.14
+    <br>
     用给定的 tar 压缩包构建 如：  docker build http://server/context.tar.gz
+    <br>
     从标准输入中读取 Dockerfile 进行构建  如： docker build - < Dockerfile 或 cat Dockerfile | docker build -
+    <br>
     从标准输入中读取上下文压缩包进行构建 如：docker build - < context.tar.gz
+    <br>
     　
 
+<h3>删除镜像</h3>
+docker rmi [选项] <镜像1> [<镜像2> ...] 如: docker rmi 501 镜像id，镜像名称 = <仓库名>:<标签> 
+<br>
+更精确的删除 是使用 “镜像摘要” 删除镜像
+docker images --digests
+$ docker images --digests
+REPOSITORY                  TAG                 DIGEST                                                                    IMAGE ID            CREATED             SIZE
+node                        slim                sha256:b4f0e0bdeb578043c1ea6862f0d40cc4afe32a4a582f3be235a3b164422be228   6e0c4c8e3913        3 weeks ago         214 MB
+
+<b>$ docker rmi node@sha256:b4f0e0bdeb578043c1ea6862f0d40cc4afe32a4a582f3be235a3b164422be228</b>
+Untagged: node@sha256:b4f0e0bdeb578043c1ea6862f0d40cc4afe32a4a582f3be235a3b164422be228
+  docker rmi $(docker images -q -f dangling=true)  批量删除虚悬镜像
+  docker rmi $(docker images -q redis)  删除所有仓库名为 redis 的镜像
+  docker rmi $(docker images -q -f before=mongo:3.2)  删除所有在 mongo:3.2 之前的镜像
+  
 
