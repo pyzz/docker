@@ -87,10 +87,48 @@ $ docker images --digests
 REPOSITORY                  TAG                 DIGEST                                                                    IMAGE ID            CREATED             SIZE
 node                        slim                sha256:b4f0e0bdeb578043c1ea6862f0d40cc4afe32a4a582f3be235a3b164422be228   6e0c4c8e3913        3 weeks ago         214 MB
 
-<b>$ docker rmi node@sha256:b4f0e0bdeb578043c1ea6862f0d40cc4afe32a4a582f3be235a3b164422be228</b>
-Untagged: node@sha256:b4f0e0bdeb578043c1ea6862f0d40cc4afe32a4a582f3be235a3b164422be228
-  docker rmi $(docker images -q -f dangling=true)  批量删除虚悬镜像
-  docker rmi $(docker images -q redis)  删除所有仓库名为 redis 的镜像
-  docker rmi $(docker images -q -f before=mongo:3.2)  删除所有在 mongo:3.2 之前的镜像
+<b>$ docker rmi node@sha256:b4f0e0bdeb578043c1ea6862f0d40cc4afe32a4a582f3be235a3b164422be228</b><br>
+Untagged: node@sha256:b4f0e0bdeb578043c1ea6862f0d40cc4afe32a4a582f3be235a3b164422be228<br>
+  docker rmi $(docker images -q -f dangling=true)  批量删除虚悬镜像<br>
+  docker rmi $(docker images -q redis)  删除所有仓库名为 redis 的镜像<br>
+  docker rmi $(docker images -q -f before=mongo:3.2)  删除所有在 mongo:3.2 之前的镜像<br>
   
 
+<h3>容器控制</h3>
+   <h4>启动容器</h4>
+    docker run 镜像名称  # 如：docker run ubuntu:14.04 /bin/echo 'Hello world' <br>
+    docker run -t -i ubuntu:14.04 /bin/bash  # 其中，-t 选项让Docker分配一个伪终端（pseudo-tty）并绑定到容器的标准输入上， -i 则让容器的标准输入保持打开。 <br>
+    
+   可以利用 docker start 命令，直接将一个已经终止的容器启动运行。
+       可以在伪终端中利用 ps 或 top 来查看进程信息
+       
+       
+ <h4>后台(background)运行</h4>
+   更多的时候，需要让 Docker 在后台运行而不是直接把执行命令的结果输出在当前宿主机下。此时，可以通过添加 -d 参数来实现。 <br> 
+        如：在寄存机上控制需要 “-d”参数  docker run -d ubuntu:14.04 /bin/sh -c "while true; do echo hello world; sleep 1; done" <br>
+   可以通过 docker ps 命令来查看容器信息。<br>
+   要获取容器的输出信息，可以通过 docker logs 命令。 <br>
+   
+   <h4>终止容器</h4>
+       docker stop 来终止一个运行中的容器<br>
+          只启动了一个终端的容器，用户通过 exit 命令或 Ctrl+d 来退出终端时，所创建的容器立刻终止。<br>
+       docker restart 命令会将一个运行态的容器终止，然后再重新启动它。<br>
+       
+   <h4>进入容器</h4>
+       某些时候需要进入容器进行操作，有很多种方法，包括使用 docker attach 命令或 nsenter 工具等。
+       
+       docker attach 是 Docker 自带的命令。下面示例如何使用该命令。<br>
+       $ sudo docker run -idt ubuntu
+       243c32535da7d142fb0e6df616a3c3ada0b8ab417937c853a9e1c251f499f550
+       $ sudo docker ps
+       CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+       243c32535da7        ubuntu:latest       "/bin/bash"         18 seconds ago      Up 17 seconds                           nostalgic_hypatia
+       $sudo docker attach nostalgic_hypatia
+       root@243c32535da7:/#
+       
+    <h4>导入导出容器</h4>
+       
+      
+       
+       
+       
