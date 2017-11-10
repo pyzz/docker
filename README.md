@@ -188,4 +188,25 @@ Untagged: node@sha256:b4f0e0bdeb578043c1ea6862f0d40cc4afe32a4a582f3be235a3b16442
        elliptics：存储数据到 Elliptics key/value 存储
         
        
-      
+   <h3>数据的管理</h3>
+   卷是一个可供一个或多个容器使用的特殊目录，它绕过 UFS，可以提供很多有用的特性：<br>
+     数据卷可以在容器之间共享和重用<br>
+     对数据卷的修改会立马生效<br>
+     对数据卷的更新，不会影响镜像<br>
+     数据卷默认会一直存在，即使容器被删除<br>
+     
+   创建一个名为 web 的容器，并加载一个数据卷到容器的 /webapp 目录<br>
+     sudo docker run -d -P --name web -v /webapp training/webapp python app.py
+   删除数据卷  docker rm -v
+   
+   挂载一个主机目录作为数据卷
+   sudo docker run -d -P --name web -v /src/webapp:/opt/webapp training/webapp python app.py
+    上面的命令加载主机的 /src/webapp 目录到容器的 /opt/webapp 目录。这个功能在进行测试的时候十分方便，比如用户可以放置一些程序到本地目录中，来查看     容器是否正常工作。本地目录的路径必须是<b>绝对路径</b>，如果目录不存在 Docker 会自动为你创建它(享有 读写权限)
+    Docker 挂载数据卷的默认权限是读写，用户也可以通过 :ro 指定为只读 如：
+       sudo docker run -d -P --name web -v /src/webapp:/opt/webapp:ro training/webapp python app.py
+   查看数据卷的具体信息
+       docker inspect web
+       
+   挂载一个本地主机文件作为数据卷
+   sudo docker run --rm -it -v ~/.bash_history:/.bash_history ubuntu /bin/bash
+   这样就可以记录在容器输入过的命令了。  注意：如果直接挂载一个文件，很多文件编辑工具，包括 vi 或者 sed --in-place，可能会造成文件 inode 的改变，从 Docker 1.1 .0起，这会导致报错误信息。所以最简单的办法就直接挂载文件的父目录。
